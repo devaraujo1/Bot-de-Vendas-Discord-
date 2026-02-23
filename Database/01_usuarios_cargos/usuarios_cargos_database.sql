@@ -1,0 +1,2 @@
+-- Módulo 01 – Usuários e Cargos
+-- SGBD: PostgreSQL
