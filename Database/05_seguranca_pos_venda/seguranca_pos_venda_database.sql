@@ -8,3 +8,12 @@ CREATE TABLE IF NOT EXISTS tb_reembolsos_revogacoes (
     motivo TEXT,
     status_reembolso VARCHAR(20) NOT NULL CHECK (status_reembolso IN ('Aprovado', 'Negado', 'Pendente'))
 );
+
+
+
+CREATE TABLE IF NOT EXISTS tb_blacklist (
+    id_blacklist SERIAL PRIMARY KEY,
+    id_discord_banido BIGINT NOT NULL,
+    motivo TEXT,
+    data_banimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
