@@ -35,3 +35,35 @@ A arquitetura prioriza **integridade referencial**, **clareza nos relacionamento
 
 ---
 
+## 🧱 Organização do Projeto
+
+O projeto está organizado de forma **modular**, onde cada módulo representa uma área funcional do sistema.  
+
+### 📂 Estrutura de pastas
+
+```text
+Bot-de-Vendas-Discord
+│
+├── README.md
+│
+├── database/
+│   │
+│   ├── entidades_atributos.md
+│   │
+│   ├── modulo_01_usuarios_cargos/
+│   │   └── usuarios_cargos_database.sql
+│   │
+│   ├── modulo_02_catalogo_produtos/
+│   │   └── catalogo_produtos_database.sql
+│   │
+│   ├── modulo_03_tickets_atendimento/
+│   │   └── tickets_atendimento_database.sql
+│   │
+│   ├── modulo_04_vendas_financeiro/
+│   │   └── vendas_financeiro_database.sql
+│   │
+│   └── modulo_05_seguranca_pos_venda/
+│       └── seguranca_pos_venda_database.sql
+│ 
+└── LICENSE
+
