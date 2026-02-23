@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS tb_reembolsos_revogacoes (
 
 CREATE TABLE IF NOT EXISTS tb_blacklist (
     id_blacklist SERIAL PRIMARY KEY,
-    id_discord_banido BIGINT NOT NULL,
+    id_discord_banido BIGINT NOT NULL UNIQUE,
     motivo TEXT,
     data_banimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
