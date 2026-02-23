@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS tb_blacklist (
     motivo TEXT,
     data_banimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE tb_blacklist
+ADD CONSTRAINT unique_discord_banido UNIQUE (id_discord_banido);
