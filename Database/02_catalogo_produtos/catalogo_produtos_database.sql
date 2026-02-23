@@ -1,0 +1,2 @@
+-- Módulo 02 – Catálogo e Produtos
+-- SGBD: PostgreSQL

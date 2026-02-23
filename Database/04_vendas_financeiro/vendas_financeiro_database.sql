@@ -1,0 +1,2 @@
+-- Módulo 04 – Vendas
+-- SGBD: PostgreSQL
