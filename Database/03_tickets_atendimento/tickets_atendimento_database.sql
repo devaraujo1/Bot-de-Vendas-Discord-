@@ -40,3 +40,4 @@ CREATE TABLE tb_avaliacoes_atendimento (
         FOREIGN KEY (id_ticket)
         REFERENCES tb_tickets(id_ticket)
 );
+  
