@@ -48,7 +48,7 @@ Bot-de-Vendas-Discord
 │
 ├── database/
 │   │
-│   ├── entidades_atributos.md
+│   ├── DATABASE_SCHEMA.md
 │   │
 │   ├── modulo_01_usuarios_cargos/
 │   │   └── usuarios_cargos_database.sql
