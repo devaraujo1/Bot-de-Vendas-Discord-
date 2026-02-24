@@ -1,7 +1,7 @@
 -- Módulo 05 – Segurança e Pós-venda
 -- SGBD: PostgreSQL
 
-
+--Tabela: tb_reembolsos_revogacoes
 CREATE TABLE IF NOT EXISTS tb_reembolsos_revogacoes (
     id_reembolso SERIAL PRIMARY KEY,
     id_pedido INT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tb_reembolsos_revogacoes (
 );
 
 
-
+--Tabela: tb_blacklist
 CREATE TABLE IF NOT EXISTS tb_blacklist (
     id_blacklist SERIAL PRIMARY KEY,
     id_discord_banido BIGINT NOT NULL UNIQUE,
