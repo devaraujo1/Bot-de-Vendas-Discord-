@@ -130,8 +130,8 @@
 
 #### **tb_produtos — Produtos à venda**
 
-| Campo               | Tipo    | Observações                           |
-| ------------------- | ------- | --------------------------------------*--- |
+| Campo               | Tipo    | Observações                                |
+| ------------------- | ------- | ------------------------------------------ |
 | id_produto          | INT     | Identificador do produto                   |
 | id_categoria        | INT     | Categoria associada                        |
 | nome                | VARCHAR | Nome do produto                            |
