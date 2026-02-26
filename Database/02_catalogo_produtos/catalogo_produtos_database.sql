@@ -1,10 +1,10 @@
-CREATE TABLE tb_categorias (
+CREATE TABLE categorias (
     id_categoria SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT
 );
 
-CREATE TABLE tb_produtos (
+CREATE TABLE produtos (
     id_produto SERIAL PRIMARY KEY,
     id_categoria INT NOT NULL,
     nome VARCHAR(150) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE tb_produtos (
         REFERENCES tb_categorias(id_categoria)
 );
 
-CREATE TABLE tb_produto_imagens (
+CREATE TABLE produto_imagens (
     id_imagem SERIAL PRIMARY KEY,
     id_produto INT NOT NULL,
     url_imagem VARCHAR(255) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE tb_produto_imagens (
         REFERENCES tb_produtos(id_produto)
 );
 
-CREATE TABLE tb_stock_digital (
+CREATE TABLE stock_digital (
     id_item SERIAL PRIMARY KEY,
     id_produto INT NOT NULL,
     conteudo_entrega TEXT NOT NULL,
