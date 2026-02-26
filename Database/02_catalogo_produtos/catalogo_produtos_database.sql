@@ -32,3 +32,4 @@ CREATE TABLE stock_digital (
         FOREIGN KEY (id_produto)
         REFERENCES tb_produtos(id_produto)
 );
+ 
