@@ -11,7 +11,7 @@ CREATE TABLE produtos (
     preco_centavos INT NOT NULL,
     CONSTRAINT fk_categoria_produto
         FOREIGN KEY (id_categoria)
-        REFERENCES tb_categorias(id_categoria)
+        REFERENCES categorias(id_categoria)
 );
 
 CREATE TABLE produto_imagens (
@@ -20,7 +20,7 @@ CREATE TABLE produto_imagens (
     url_imagem VARCHAR(255) NOT NULL,
     CONSTRAINT fk_imagem_produto
         FOREIGN KEY (id_produto)
-        REFERENCES tb_produtos(id_produto)
+        REFERENCES produtos(id_produto)
 );
 
 CREATE TABLE stock_digital (
@@ -30,6 +30,5 @@ CREATE TABLE stock_digital (
     vendido BOOLEAN DEFAULT FALSE,
     CONSTRAINT fk_stock_produto
         FOREIGN KEY (id_produto)
-        REFERENCES tb_produtos(id_produto)
+        REFERENCES produtos(id_produto)
 );
- 
