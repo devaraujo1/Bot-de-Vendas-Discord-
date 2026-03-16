@@ -121,3 +121,28 @@ INSERT INTO avaliacoes_atendimento (id_ticket, nota, comentario) VALUES
 (22,2,'Poderia ser melhor'),
 (26,5,'Perfeito'),
 (30,4,'Satisfeito');
+
+
+SELECT 
+    tk.id_dono_discord AS usuario,
+    tk.id_ticket,
+    m.conteudo
+FROM tickets tk
+LEFT JOIN mensagens_ticket m
+ON tk.id_ticket = m.id_ticket;
+
+
+SELECT 
+    tk.id_ticket,
+    tp.nome_tipo
+FROM tickets tk
+INNER JOIN tipos_ticket tp
+ON tk.id_tipo = tp.id_tipo;
+
+
+SELECT 
+    tk.id_ticket,
+    m.conteudo
+FROM tickets tk
+INNER JOIN mensagens_ticket m
+ON tk.id_ticket = m.id_ticket;
