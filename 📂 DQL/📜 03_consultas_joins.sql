@@ -1,5 +1,5 @@
 -- ====================================================================================
--- SCRIPT DQL: CONSULTAS RELACIONAIS (JOINS)
+-- SCRIPT DQL: CONSULTAS RELACIONAIS 
 -- Projeto: Bot de Vendas Discord
 -- ====================================================================================
 
