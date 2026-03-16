@@ -1,5 +1,5 @@
 -- ======================================================================
--- 1) DROP TABLES (FILHAS → PAIS)
+-- 1) DROP TABLES 
 -- ======================================================================
 DROP TABLE IF EXISTS reembolsos_revogacoes;
 DROP TABLE IF EXISTS pagamentos_pix;
@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS cargos;
 DROP TABLE IF EXISTS utilizadores;
 
 -- ======================================================================
--- 2) CREATE TABLES (PAIS → FILHAS)
+-- 2) CREATE TABLES 
 -- ======================================================================
 
 CREATE TABLE utilizadores ( 
