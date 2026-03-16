@@ -28,7 +28,7 @@ INSERT INTO permissoes (id_cargo, chave_permissao) VALUES
 (1, 'criar_produto'), 
 (2, 'fechar_ticket');
 
--- 📌 2) TABELAS CORE (Mínimo de 30 registros usando generate_series)
+-- 📌 2) TABELAS CORE
 INSERT INTO utilizadores (id_discord, nome_utilizador, tag_discord) 
 SELECT (100000000000000000 + gs)::bigint, 'Usuario ' || gs, lpad((gs % 9999 + 1)::text, 4, '0') 
 FROM generate_series(1, 30) AS gs;
