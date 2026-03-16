@@ -1,8 +1,8 @@
 -- ======================================================================
--- SCRIPT DML: INSERÇÃO DE DADOS (POPULANDO O BANCO)
+-- SCRIPT DML: INSERÇÃO DE DADOS 
 -- ======================================================================
 
--- 📌 1) TABELAS AUXILIARES (Mínimo de 3 registros)
+-- 📌 1) TABELAS AUXILIARES 
 INSERT INTO cargos (nome_cargo, id_cargo_discord) VALUES 
 ('Admin', 900000000000000001), 
 ('Suporte', 900000000000000002), 
