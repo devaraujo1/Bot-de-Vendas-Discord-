@@ -61,37 +61,36 @@ LEFT JOIN utilizador_cargos uc ON c.codigo = uc.cargo_codigo
 LEFT JOIN utilizadores u ON uc.usuario_uid = u.discord_uid;
 
 
--- 7. Inner Join: Exiba o ID do ticket de suporte e o nome do moderador designado.
+-- 7. Inner Join: Exiba o ID do ticket de suporte e o nome do moderador que foi designado para resolvê-lo.
 SELECT DISTINCT
-    t.id_ticket, 
-    t.status,
-    u.nome_utilizador AS moderador_atuante
+    t.numero AS numero_ticket, 
+    t.status_ticket,
+    u.nome_usuario AS moderador_atuante
 FROM tickets t
-INNER JOIN mensagens_ticket m ON t.id_ticket = m.id_ticket
-INNER JOIN utilizadores u ON m.id_autor_discord = u.id_discord
-INNER JOIN utilizador_cargos uc ON u.id_discord = uc.id_discord
-INNER JOIN cargos c ON uc.id_cargo = c.id_cargo
+INNER JOIN mensagens_ticket m ON t.numero = m.ticket_numero
+INNER JOIN utilizadores u ON m.autor_uid = u.discord_uid
+INNER JOIN utilizador_cargos uc ON u.discord_uid = uc.usuario_uid
+INNER JOIN cargos c ON uc.cargo_codigo = c.codigo
 WHERE c.nome_cargo IN ('Admin', 'Suporte');
-
 
 -- 8. Inner Join: Relacione a venda com o código de transação PIX gerado pelo sistema.
 SELECT 
-    ped.id_pedido, 
-    ped.valor_total, 
-    pix.codigo_copia_cola, 
-    pix.txid AS transacao_pix
+    ped.numero AS numero_pedido, 
+    ped.valor_final, 
+    fp.descricao_forma,
+    pag.codigo_transacao
 FROM pedidos ped
-INNER JOIN pagamentos_pix pix ON ped.id_pedido = pix.id_pedido;
+INNER JOIN pagamentos pag ON ped.numero = pag.pedido_numero
+INNER JOIN formas_pagamento fp ON pag.forma_codigo = fp.codigo
+WHERE fp.descricao_forma = 'PIX';
 
-
--- 9. Left Join: Mostre todos os produtos digitais e os logs de auditoria (histórico), 
--- incluindo produtos recém-lançados sem logs.
+-- 9. Left Join: Mostre todos os produtos digitais e os logs de auditoria (histórico), incluindo produtos recém-lançados.
 SELECT 
-    prod.nome AS produto_digital, 
-    est.id_item AS log_historico_id, 
+    prod.nome_produto, 
+    est.codigo AS log_historico_id, 
     est.conteudo_entrega AS log_conteudo
 FROM produtos prod
-LEFT JOIN stock_digital est ON prod.id_produto = est.id_produto;
+LEFT JOIN stock_digital est ON prod.codigo = est.produto_codigo;
 
 
 -- 10. Inner Join: Exiba o nome do usuário e o motivo do bloqueio registrado na tabela de auditoria.
