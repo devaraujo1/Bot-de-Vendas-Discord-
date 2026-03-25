@@ -125,22 +125,22 @@ CREATE TABLE stock_digital (
     CONSTRAINT fk_stock_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto) ON DELETE CASCADE 
 );
 
-CREATE TABLE mensagens_ticket ( 
-    id_mensagem SERIAL PRIMARY KEY, 
-    id_ticket INT NOT NULL, 
-    id_autor_discord BIGINT NOT NULL, 
-    conteudo TEXT NOT NULL, 
-    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    CONSTRAINT fk_mensagem_ticket FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket) ON DELETE CASCADE, 
-    CONSTRAINT fk_mensagem_autor FOREIGN KEY (id_autor_discord) REFERENCES utilizadores(id_discord) ON DELETE CASCADE 
+CREATE TABLE mensagens_ticket (
+    id_ticket INT NOT NULL,
+    id_autor_discord BIGINT NOT NULL,
+    conteudo TEXT NOT NULL,
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_ticket, id_autor_discord, data_envio),
+    FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket)
 );
 
-CREATE TABLE avaliacoes_atendimento ( 
-    id_avaliacao SERIAL PRIMARY KEY, 
-    id_ticket INT NOT NULL, 
-    nota INT CHECK (nota BETWEEN 1 AND 5), 
-    comentario TEXT, 
-    CONSTRAINT fk_ticket_avaliacao FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket) ON DELETE CASCADE 
+
+CREATE TABLE avaliacoes_atendimento (
+    id_ticket INT NOT NULL,
+    nota INT CHECK (nota BETWEEN 1 AND 5),
+    comentario TEXT,
+    PRIMARY KEY (id_ticket),
+    FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket)
 );
 
 CREATE TABLE itens_pedido ( 
