@@ -115,46 +115,47 @@ CREATE TABLE tickets (
 ); 
 );
 
-CREATE TABLE pedidos ( 
-    id_pedido SERIAL PRIMARY KEY, 
-    id_comprador_discord BIGINT NOT NULL, 
-    id_cupom INT, 
-    valor_total INT NOT NULL, 
-    status_pagamento VARCHAR(20) NOT NULL CHECK (status_pagamento IN ('Pendente', 'Pago', 'Cancelado')), 
-    CONSTRAINT fk_pedido_comprador FOREIGN KEY (id_comprador_discord) REFERENCES utilizadores(id_discord) ON DELETE CASCADE, 
-    CONSTRAINT fk_pedido_cupom FOREIGN KEY (id_cupom) REFERENCES cupons(id_cupom) ON DELETE SET NULL 
+CREATE TABLE pedidos (
+    numero SERIAL PRIMARY KEY, 
+    comprador_uid BIGINT NOT NULL, 
+    cupom_codigo INT, 
+    valor_final INT NOT NULL, 
+    status_pedido VARCHAR(20) NOT NULL CHECK (status_pedido IN ('Pendente', 'Pago', 'Cancelado')), 
+    CONSTRAINT fk_pedido_comprador FOREIGN KEY (comprador_uid) REFERENCES utilizadores(discord_uid) ON DELETE CASCADE, 
+    CONSTRAINT fk_pedido_cupom FOREIGN KEY (cupom_codigo) REFERENCES cupons(codigo) ON DELETE SET NULL 
 );
 
 CREATE TABLE blacklist ( 
-    id_blacklist SERIAL PRIMARY KEY, 
-    id_discord_banido BIGINT NOT NULL UNIQUE, 
-    motivo TEXT, 
+    codigo SERIAL PRIMARY KEY, 
+    banido_uid BIGINT NOT NULL UNIQUE, 
+    motivo_banimento TEXT, 
     data_banimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    CONSTRAINT fk_blacklist_user FOREIGN KEY (id_discord_banido) REFERENCES utilizadores(id_discord) ON DELETE CASCADE 
+    CONSTRAINT fk_blacklist_user FOREIGN KEY (banido_uid) REFERENCES utilizadores(discord_uid) ON DELETE CASCADE 
 );
 
 CREATE TABLE produto_imagens ( 
-    id_imagem SERIAL PRIMARY KEY, 
-    id_produto INT NOT NULL, 
+    codigo SERIAL PRIMARY KEY, 
+    produto_codigo INT NOT NULL, 
     url_imagem VARCHAR(255) NOT NULL, 
-    CONSTRAINT fk_imagem_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto) ON DELETE CASCADE 
+    CONSTRAINT fk_imagem_produto FOREIGN KEY (produto_codigo) REFERENCES produtos(codigo) ON DELETE CASCADE 
 );
 
 CREATE TABLE stock_digital ( 
-    id_item SERIAL PRIMARY KEY, 
-    id_produto INT NOT NULL, 
+    codigo SERIAL PRIMARY KEY, 
+    produto_codigo INT NOT NULL, 
     conteudo_entrega TEXT NOT NULL, 
-    vendido BOOLEAN DEFAULT FALSE, 
-    CONSTRAINT fk_stock_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto) ON DELETE CASCADE 
+    foi_vendido BOOLEAN DEFAULT FALSE, 
+    CONSTRAINT fk_stock_produto FOREIGN KEY (produto_codigo) REFERENCES produtos(codigo) ON DELETE CASCADE 
 );
 
-CREATE TABLE mensagens_ticket (
-    id_ticket INT NOT NULL,
-    id_autor_discord BIGINT NOT NULL,
-    conteudo TEXT NOT NULL,
-    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_ticket, id_autor_discord, data_envio),
-    FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket)
+CREATE TABLE mensagens_ticket ( 
+    codigo SERIAL PRIMARY KEY, 
+    ticket_numero INT NOT NULL, 
+    autor_uid BIGINT NOT NULL, 
+    conteudo_mensagem TEXT NOT NULL, 
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    CONSTRAINT fk_mensagem_ticket FOREIGN KEY (ticket_numero) REFERENCES tickets(numero) ON DELETE CASCADE, 
+    CONSTRAINT fk_mensagem_autor FOREIGN KEY (autor_uid) REFERENCES utilizadores(discord_uid) ON DELETE CASCADE 
 );
 
 
