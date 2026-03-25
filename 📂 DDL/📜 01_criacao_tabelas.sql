@@ -38,10 +38,10 @@ CREATE TABLE cargos (
     discord_role_uid BIGINT NOT NULL UNIQUE
 );
 
-CREATE TABLE categorias ( 
-    id_categoria SERIAL PRIMARY KEY, 
-    nome VARCHAR(100) NOT NULL, 
-    descricao TEXT 
+CREATE TABLE categorias (
+    codigo SERIAL PRIMARY KEY, 
+    nome_categoria VARCHAR(100) NOT NULL, 
+    descricao_categoria TEXT 
 );
 
 CREATE TABLE formas_pagamento (
@@ -49,10 +49,10 @@ CREATE TABLE formas_pagamento (
     descricao_forma VARCHAR(50) NOT NULL UNIQUE 
 );
 
-CREATE TABLE tipos_ticket ( 
-    id_tipo SERIAL PRIMARY KEY, 
+CREATE TABLE tipos_ticket (
+    codigo SERIAL PRIMARY KEY, 
     nome_tipo VARCHAR(100) NOT NULL, 
-    descricao VARCHAR(255) 
+    descricao_tipo VARCHAR(255) 
 );
 
 CREATE TABLE cupons (
