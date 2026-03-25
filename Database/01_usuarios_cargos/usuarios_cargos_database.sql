@@ -4,31 +4,32 @@ DROP TABLE IF EXISTS cargos;
 DROP TABLE IF EXISTS utilizadores;
 
 CREATE TABLE utilizadores ( 
-    id_discord BIGINT PRIMARY KEY, 
+    id SERIAL PRIMARY KEY, 
     nome_utilizador VARCHAR(100) NOT NULL, 
     tag_discord VARCHAR(10) NOT NULL, 
     data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
 );
 
 CREATE TABLE cargos ( 
-    id_cargo SERIAL PRIMARY KEY, 
+    id SERIAL PRIMARY KEY, 
     nome_cargo VARCHAR(50) NOT NULL UNIQUE, 
     id_cargo_discord BIGINT NOT NULL 
 );
 
-CREATE TABLE utilizador_cargos ( 
-    id_discord BIGINT NOT NULL, 
-    id_cargo INTEGER NOT NULL, 
-    PRIMARY KEY (id_discord, id_cargo), 
+CREATE TABLE utilizador_cargos (
+    id_discord BIGINT NOT NULL,
+    id_cargo INTEGER NOT NULL,
+    PRIMARY KEY (id_discord, id_cargo),  
     CONSTRAINT fk_uc_utilizador FOREIGN KEY (id_discord) REFERENCES utilizadores(id_discord) ON DELETE CASCADE, 
-    CONSTRAINT fk_uc_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE CASCADE 
+    CONSTRAINT fk_uc_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id) ON DELETE CASCADE
+    UNIQUE (id_doscprd, id_cargo)
 );
 
 CREATE TABLE permissoes ( 
-    id_permissao SERIAL PRIMARY KEY, 
+    id SERIAL PRIMARY KEY, 
     id_cargo INTEGER NOT NULL, 
     chave_permissao VARCHAR(100) NOT NULL, 
-    CONSTRAINT fk_perm_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE CASCADE, 
+    CONSTRAINT fk_perm_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id) ON DELETE CASCADE, 
     UNIQUE (id_cargo, chave_permissao) 
 );
 
