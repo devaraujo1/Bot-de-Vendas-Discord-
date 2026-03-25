@@ -62,15 +62,6 @@ CREATE TABLE cupons (
     data_validade DATE 
 );
 
-
-
-CREATE TABLE cupons ( 
-    codigo SERIAL PRIMARY KEY, 
-    chave_cupom VARCHAR(50) NOT NULL UNIQUE, 
-    percentual_desconto INT CHECK (percentual_desconto >= 0 AND percentual_desconto <= 100), 
-    data_validade DATE 
-);
-
 CREATE TABLE utilizador_cargos ( 
     usuario_uid BIGINT NOT NULL, 
     cargo_codigo INTEGER NOT NULL, 
