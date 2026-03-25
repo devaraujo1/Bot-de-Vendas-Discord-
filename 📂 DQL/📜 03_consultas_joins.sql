@@ -35,22 +35,22 @@ LEFT JOIN tickets t ON u.id_discord = t.id_dono_discord;
 
 -- 4. Inner Join: Mostre o nome do produto digital e a categoria à qual ele pertence.
 SELECT 
-    p.nome AS nome_produto, 
-    c.nome AS categoria
+    p.nome_produto, 
+    c.nome_categoria
 FROM produtos p
-INNER JOIN categorias c ON p.id_categoria = c.id_categoria;
+INNER JOIN categorias c ON p.categoria_codigo = c.codigo;
 
 
 -- 5. Inner Join: Relacione a venda com o código do produto que foi entregue automaticamente.
 SELECT 
-    ped.id_pedido, 
-    prod.nome AS produto, 
+    ped.numero AS numero_pedido, 
+    prod.nome_produto, 
     est.conteudo_entrega AS chave_entregue
 FROM pedidos ped
-INNER JOIN itens_pedido ip ON ped.id_pedido = ip.id_pedido
-INNER JOIN produtos prod ON ip.id_produto = prod.id_produto
-INNER JOIN stock_digital est ON prod.id_produto = est.id_produto
-WHERE est.vendido = TRUE;
+INNER JOIN itens_pedido ip ON ped.numero = ip.pedido_numero
+INNER JOIN produtos prod ON ip.produto_codigo = prod.codigo
+INNER JOIN stock_digital est ON prod.codigo = est.produto_codigo
+WHERE est.foi_vendido = TRUE;
 
 
 -- 6. Left Join: Liste todos os cargos/permissões do servidor e os usuários vinculados, 
@@ -58,11 +58,11 @@ WHERE est.vendido = TRUE;
 SELECT 
     c.nome_cargo, 
     p.chave_permissao, 
-    u.nome_utilizador
+    u.nome_usuario
 FROM cargos c
-LEFT JOIN permissoes p ON c.id_cargo = p.id_cargo
-LEFT JOIN utilizador_cargos uc ON c.id_cargo = uc.id_cargo
-LEFT JOIN utilizadores u ON uc.id_discord = u.id_discord;
+LEFT JOIN permissoes p ON c.codigo = p.cargo_codigo
+LEFT JOIN utilizador_cargos uc ON c.codigo = uc.cargo_codigo
+LEFT JOIN utilizadores u ON uc.usuario_uid = u.discord_uid;
 
 
 -- 7. Inner Join: Exiba o ID do ticket de suporte e o nome do moderador designado.
