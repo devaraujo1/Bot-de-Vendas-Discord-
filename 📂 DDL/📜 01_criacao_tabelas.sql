@@ -2,7 +2,7 @@
 -- 1) DROP TABLES 
 -- ======================================================================
 DROP TABLE IF EXISTS reembolsos_revogacoes;
-DROP TABLE IF EXISTS pagamentos_pix;
+DROP TABLE IF EXISTS pagamentos;
 DROP TABLE IF EXISTS itens_pedido;
 DROP TABLE IF EXISTS avaliacoes_atendimento;
 DROP TABLE IF EXISTS mensagens_ticket;
