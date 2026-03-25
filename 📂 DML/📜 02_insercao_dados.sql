@@ -16,10 +16,11 @@ INSERT INTO categorias (nome, descricao) VALUES
 ('Skins', 'Customização de personagens e veículos.'), 
 ('Moedas', 'Moedas virtuais para a economia in-game.');
 
-INSERT INTO tipos_ticket (nome_tipo, descricao) VALUES 
-('Suporte Técnico', 'Problemas técnicos no sistema'), 
-('Denúncia', 'Denúncia de comportamento inadequado'), 
-('Dúvida', 'Dúvidas gerais sobre regras');
+INSERT INTO tipos_ticket (nome_tipo, descricao_tipo) VALUES 
+('Dúvida sobre Produto', 'Questões antes da compra'), 
+('Suporte Técnico', 'Erro ao resgatar ou usar produto'), 
+('Denúncia', 'Denunciar usuários no servidor');
+
 
 INSERT INTO cupons (codigo, percentual_desconto, data_validade) VALUES 
 ('BEMVINDO', 10, CURRENT_DATE + INTERVAL '30 days'), 
