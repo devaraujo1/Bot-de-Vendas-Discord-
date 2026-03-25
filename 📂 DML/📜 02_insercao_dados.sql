@@ -11,11 +11,10 @@ INSERT INTO cargos (nome_cargo, discord_role_uid) VALUES
 INSERT INTO formas_pagamento (descricao_forma) VALUES  
 ('PIX'), ('Cartão de Crédito'), ('Saldo na Loja Discord');
 
--- CORRIGIDO: nome_categoria, descricao_categoria
 INSERT INTO categorias (nome_categoria, descricao_categoria) VALUES 
-('Scripts', 'Scripts de automação e utilitários.'), 
-('Skins', 'Customização de personagens e veículos.'), 
-('Moedas', 'Moedas virtuais para a economia in-game.');
+('VIPs e Cargos', 'Acesso a áreas exclusivas no servidor.'), 
+('Economia e Moedas', 'Moedas virtuais para jogos internos.'), 
+('Scripts FiveM', 'Scripts profissionais para servidores de RP.');
 
 INSERT INTO tipos_ticket (nome_tipo, descricao_tipo) VALUES 
 ('Dúvida sobre Produto', 'Questões antes da compra'), 
@@ -25,11 +24,8 @@ INSERT INTO tipos_ticket (nome_tipo, descricao_tipo) VALUES
 INSERT INTO cupons (chave_cupom, percentual_desconto, data_validade) VALUES 
 ('NATAL20', 20, '2026-12-25'), ('BEMVINDO', 10, '2028-01-01'), ('BLACKFRIDAY', 50, '2026-11-28');
 
--- CORRIGIDO: cargo_codigo no lugar de id_cargo
 INSERT INTO permissoes (cargo_codigo, chave_permissao) VALUES 
-(1, 'banir_utilizador'), 
-(1, 'criar_produto'), 
-(2, 'fechar_ticket');
+(1, 'gerenciar_produtos'), (1, 'banir_membros'), (2, 'responder_tickets');
 
 
 -- 📌 2) TABELAS CORE
