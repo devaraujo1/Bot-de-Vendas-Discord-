@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS cargos;
 DROP TABLE IF EXISTS utilizadores;
 
 CREATE TABLE utilizadores ( 
-    id SERIAL PRIMARY KEY, 
+    id BIGINT PRIMARY KEY, 
     nome_utilizador VARCHAR(100) NOT NULL, 
     tag_discord VARCHAR(10) NOT NULL, 
     data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
@@ -20,9 +20,9 @@ CREATE TABLE utilizador_cargos (
     id_discord BIGINT NOT NULL,
     id_cargo INTEGER NOT NULL,
     PRIMARY KEY (id_discord, id_cargo),  
-    CONSTRAINT fk_uc_utilizador FOREIGN KEY (id_discord) REFERENCES utilizadores(id_discord) ON DELETE CASCADE, 
+    CONSTRAINT fk_uc_utilizador FOREIGN KEY (id_discord) REFERENCES utilizadores(id) ON DELETE CASCADE, 
     CONSTRAINT fk_uc_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id) ON DELETE CASCADE
-    UNIQUE (id_doscprd, id_cargo)
+    UNIQUE (id_discord, id_cargo)
 );
 
 CREATE TABLE permissoes ( 
@@ -44,7 +44,7 @@ INSERT INTO cargos (nome_cargo, id_cargo_discord) VALUES
 ('Comprador VIP', 900000000000000003);
 
 -- 30 Utilizadores (Tabela Core)
-INSERT INTO utilizadores (id_discord, nome_utilizador, tag_discord) 
+INSERT INTO utilizadores (id, nome_utilizador, tag_discord) 
 SELECT (100000000000000000 + gs)::bigint, 'Usuario ' || gs, lpad((gs % 9999 + 1)::text, 4, '0') 
 FROM generate_series(1, 30) AS gs;
 
