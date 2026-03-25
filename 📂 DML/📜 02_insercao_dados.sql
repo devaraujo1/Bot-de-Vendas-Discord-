@@ -3,10 +3,13 @@
 -- ======================================================================
 
 -- 📌 1) TABELAS AUXILIARES 
-INSERT INTO cargos (nome_cargo, id_cargo_discord) VALUES 
+INSERT INTO cargos (nome_cargo, discord_role_uid) VALUES 
 ('Admin', 900000000000000001), 
 ('Suporte', 900000000000000002), 
 ('Comprador VIP', 900000000000000003);
+
+INSERT INTO formas_pagamento (descricao_forma) VALUES  
+('PIX'), ('Cartão de Crédito'), ('Saldo na Loja Discord');
 
 INSERT INTO categorias (nome, descricao) VALUES 
 ('Scripts', 'Scripts de automação e utilitários.'), 
@@ -29,9 +32,22 @@ INSERT INTO permissoes (id_cargo, chave_permissao) VALUES
 (2, 'fechar_ticket');
 
 -- 📌 2) TABELAS CORE
-INSERT INTO utilizadores (id_discord, nome_utilizador, tag_discord) 
-SELECT (100000000000000000 + gs)::bigint, 'Usuario ' || gs, lpad((gs % 9999 + 1)::text, 4, '0') 
-FROM generate_series(1, 30) AS gs;
+INSERT INTO utilizadores (discord_uid, nome_usuario, tag_usuario) VALUES    
+(100000000000000001, 'NinjaGamer', '0001'), (100000000000000002, 'FakerBr', '9999'), 
+(100000000000000003, 'FallenCS', '1337'), (100000000000000004, 'Gaules', '5555'), 
+(100000000000000005, 'Alanzoka', '2020'), (100000000000000006, 'Coringa', '7777'),
+(100000000000000007, 'Yoda', '1010'), (100000000000000008, 'Jukes', '8888'), 
+(100000000000000009, 'Nobru', '0000'), (100000000000000010, 'Cerol', '1111'), 
+(100000000000000011, 'Piuzinho', '2222'), (100000000000000012, 'PlayHard', '3333'),
+(100000000000000013, 'Bida', '4444'), (100000000000000014, 'Mch', '6666'), 
+(100000000000000015, 'Apoka', '1212'), (100000000000000016, 'S1mple', '0002'), 
+(100000000000000017, 'ZywOo', '0003'), (100000000000000018, 'Niko', '0004'),
+(100000000000000019, 'Coldzera', '0005'), (100000000000000020, 'Taco', '0006'), 
+(100000000000000021, 'Fer', '0007'), (100000000000000022, 'Fnx', '0008'), 
+(100000000000000023, 'Boltz', '0009'), (100000000000000024, 'Kscerato', '0010'),
+(100000000000000025, 'Yuurih', '0011'), (100000000000000026, 'ArT', '0012'), 
+(100000000000000027, 'Vini', '0013'), (100000000000000028, 'Galle', '0014'), 
+(100000000000000029, 'Xantares', '0015'), (100000000000000030, 'Ropz', '0016');
 
 INSERT INTO utilizador_cargos (id_utilizador, id_cargo) VALUES
 (1, 1),
