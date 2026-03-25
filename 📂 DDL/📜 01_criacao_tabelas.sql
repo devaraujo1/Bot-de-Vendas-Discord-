@@ -188,9 +188,9 @@ CREATE TABLE pagamentos_pix (
 );
 
 CREATE TABLE reembolsos_revogacoes ( 
-    id_reembolso SERIAL PRIMARY KEY, 
-    id_pedido INT NOT NULL, 
-    motivo TEXT, 
+    codigo SERIAL PRIMARY KEY, 
+    pedido_numero INT NOT NULL UNIQUE, 
+    motivo_reembolso TEXT, 
     status_reembolso VARCHAR(20) NOT NULL CHECK (status_reembolso IN ('Aprovado', 'Negado', 'Pendente')), 
-    CONSTRAINT fk_reembolso_pedido FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE 
+    CONSTRAINT fk_reembolso_pedido FOREIGN KEY (pedido_numero) REFERENCES pedidos(numero) ON DELETE CASCADE 
 );
