@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS permissoes;
 DROP TABLE IF EXISTS utilizador_cargos;
 DROP TABLE IF EXISTS cupons;
 DROP TABLE IF EXISTS tipos_ticket;
+DROP TABLE IF EXISTS formas_pagamento;
 DROP TABLE IF EXISTS categorias;
 DROP TABLE IF EXISTS cargos;
 DROP TABLE IF EXISTS utilizadores;
@@ -25,22 +26,27 @@ DROP TABLE IF EXISTS utilizadores;
 -- ======================================================================
 
 CREATE TABLE utilizadores ( 
-    id_discord BIGINT PRIMARY KEY, 
-    nome_utilizador VARCHAR(100) NOT NULL, 
-    tag_discord VARCHAR(10) NOT NULL, 
+    discord_uid BIGINT PRIMARY KEY, 
+    nome_usuario VARCHAR(100) NOT NULL, 
+    tag_usuario VARCHAR(10) NOT NULL, 
     data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
 );
 
 CREATE TABLE cargos ( 
-    id_cargo SERIAL PRIMARY KEY, 
+    codigo SERIAL PRIMARY KEY, 
     nome_cargo VARCHAR(50) NOT NULL UNIQUE, 
-    id_cargo_discord BIGINT NOT NULL 
+    discord_role_uid BIGINT NOT NULL UNIQUE
 );
 
 CREATE TABLE categorias ( 
     id_categoria SERIAL PRIMARY KEY, 
     nome VARCHAR(100) NOT NULL, 
     descricao TEXT 
+);
+
+CREATE TABLE formas_pagamento (
+    codigo SERIAL PRIMARY KEY, 
+    descricao_forma VARCHAR(50) NOT NULL UNIQUE 
 );
 
 CREATE TABLE tipos_ticket ( 
@@ -57,11 +63,11 @@ CREATE TABLE cupons (
 );
 
 CREATE TABLE utilizador_cargos ( 
-    id_discord BIGINT NOT NULL, 
-    id_cargo INTEGER NOT NULL, 
-    PRIMARY KEY (id_discord, id_cargo), 
-    CONSTRAINT fk_uc_utilizador FOREIGN KEY (id_discord) REFERENCES utilizadores(id_discord) ON DELETE CASCADE, 
-    CONSTRAINT fk_uc_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo) ON DELETE CASCADE 
+    codigo SERIAL PRIMARY KEY, 
+    cargo_codigo INTEGER NOT NULL,
+    Chave_permissao VARCHAR(100) NOT NULL, 
+    CONSTRAINT fk_perm_cargo FOREIGN KEY (cargo_codigo) REFERENCES cargos(codigo) ON DELETE CASCADE, 
+    UNIQUE (cargo_codigo, chave_permissao)
 );
 
 CREATE TABLE permissoes ( 
