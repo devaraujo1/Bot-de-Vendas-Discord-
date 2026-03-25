@@ -94,32 +94,30 @@ FROM produtos prod
 LEFT JOIN stock_digital est ON prod.id_produto = est.id_produto;
 
 
--- 10. Inner Join: Exiba o nome do usuário e o motivo do bloqueio registrado na auditoria.
+-- 10. Inner Join: Exiba o nome do usuário e o motivo do bloqueio registrado na tabela de auditoria.
 SELECT 
-    u.nome_utilizador, 
-    b.motivo AS motivo_bloqueio, 
+    u.nome_usuario, 
+    b.motivo_banimento, 
     b.data_banimento
 FROM utilizadores u
-INNER JOIN blacklist b ON u.id_discord = b.id_discord_banido;
+INNER JOIN blacklist b ON u.discord_uid = b.banido_uid;
 
-
--- 11. Inner Join: Relacione os cupons de desconto com as vendas onde foram aplicados.
+-- 11. Inner Join: Relacione os cupons de desconto com as vendas onde eles foram aplicados.
 SELECT 
-    c.codigo AS cupom_aplicado, 
+    c.chave_cupom, 
     c.percentual_desconto, 
-    ped.id_pedido, 
-    ped.valor_total
+    ped.numero AS numero_pedido, 
+    ped.valor_final
 FROM cupons c
-INNER JOIN pedidos ped ON c.id_cupom = ped.id_cupom;
+INNER JOIN pedidos ped ON c.codigo = ped.cupom_codigo;
 
-
--- 12. Right Join: Liste todas as ações administrativas cadastradas e o admin que as executou.
+-- 12. Right Join: Liste todas as ações administrativas cadastradas e o nome do administrador que as executou.
 SELECT 
     p.chave_permissao AS acao_administrativa, 
     c.nome_cargo,
-    u.nome_utilizador AS administrador
+    u.nome_usuario AS administrador
 FROM permissoes p
-RIGHT JOIN cargos c ON p.id_cargo = c.id_cargo
-RIGHT JOIN utilizador_cargos uc ON c.id_cargo = uc.id_cargo
-RIGHT JOIN utilizadores u ON uc.id_discord = u.id_discord
+RIGHT JOIN cargos c ON p.cargo_codigo = c.codigo
+RIGHT JOIN utilizador_cargos uc ON c.codigo = uc.cargo_codigo
+RIGHT JOIN utilizadores u ON uc.usuario_uid = u.discord_uid
 WHERE p.chave_permissao IS NOT NULL;
