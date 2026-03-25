@@ -37,9 +37,37 @@ INSERT INTO utilizador_cargos (id_discord, id_cargo)
 SELECT (100000000000000000 + gs)::bigint, ((gs % 3) + 1)::int 
 FROM generate_series(1, 30) AS gs;
 
-INSERT INTO produtos (id_categoria, nome, preco_centavos) 
-SELECT ((gs % 3) + 1)::int, 'Produto Digital ' || gs, ((gs * 100) + 500)::int 
-FROM generate_series(1, 30) AS gs;
+INSERT INTO produtos (id_categoria, nome, descricao, preco) VALUES
+(1, 'Windows 11 Pro OEM', 'Licença digital do Windows 11 Pro OEM', 89.90),
+(1, 'Windows 10 Pro OEM', 'Licença digital do Windows 10 Pro OEM', 79.90),
+(1, 'Office 2021 Professional Plus', 'Pacote Office 2021 Professional Plus', 119.90),
+(1, 'Office 2019 Professional Plus', 'Pacote Office 2019 Professional Plus', 99.90),
+(1, 'Microsoft 365 Personal 1 Ano', 'Assinatura Microsoft 365 Personal por 1 ano', 149.90),
+(2, 'Kaspersky Standard 1 Dispositivo', 'Antivírus Kaspersky Standard para 1 dispositivo', 59.90),
+(2, 'Kaspersky Plus 3 Dispositivos', 'Antivírus Kaspersky Plus para 3 dispositivos', 99.90),
+(2, 'ESET NOD32 1 Ano', 'Licença ESET NOD32 por 1 ano', 54.90),
+(2, 'Avast Premium Security', 'Licença Avast Premium Security', 69.90),
+(2, 'Bitdefender Total Security', 'Licença Bitdefender Total Security', 89.90),
+(3, 'Minecraft Java Edition', 'Chave digital do jogo Minecraft Java Edition', 79.90),
+(3, 'Minecraft Bedrock Edition', 'Chave digital do jogo Minecraft Bedrock Edition', 74.90),
+(3, 'The Witcher 3 Complete Edition', 'Chave digital The Witcher 3 Complete Edition', 59.90),
+(3, 'Elden Ring', 'Chave digital do jogo Elden Ring', 149.90),
+(3, 'Red Dead Redemption 2', 'Chave digital Red Dead Redemption 2', 109.90),
+(3, 'Cyberpunk 2077', 'Chave digital Cyberpunk 2077', 119.90),
+(3, 'FIFA 24', 'Chave digital EA Sports FC 24', 159.90),
+(3, 'GTA V Premium Edition', 'Chave digital GTA V Premium Edition', 69.90),
+(4, 'Spotify Premium 3 Meses', 'Gift card Spotify Premium 3 meses', 49.90),
+(4, 'Netflix Gift Card 1 Mês', 'Gift card Netflix equivalente a 1 mês', 39.90),
+(4, 'Google Play Gift Card 50', 'Gift card Google Play saldo 50', 50.00),
+(4, 'PlayStation Store 100', 'Gift card PlayStation Store saldo 100', 100.00),
+(4, 'Xbox Gift Card 50', 'Gift card Xbox saldo 50', 50.00),
+(4, 'Steam Gift Card 20', 'Gift card Steam saldo 20', 20.00),
+(5, 'Canva Pro 1 Ano', 'Assinatura Canva Pro por 1 ano', 89.90),
+(5, 'Adobe Photoshop 1 Mês', 'Assinatura Adobe Photoshop por 1 mês', 79.90),
+(5, 'CapCut Pro 1 Ano', 'Assinatura CapCut Pro por 1 ano', 69.90),
+(5, 'NordVPN 1 Ano', 'Assinatura NordVPN por 1 ano', 129.90),
+(5, 'ChatGPT Plus 1 Mês', 'Acesso premium por 1 mês', 99.90),
+(5, 'Curso Excel Completo', 'Acesso ao curso completo de Excel', 39.90);
 
 INSERT INTO produto_imagens (id_produto, url_imagem) 
 SELECT gs, 'https://cdn.discordapp.com/img' || gs || '.png' 
