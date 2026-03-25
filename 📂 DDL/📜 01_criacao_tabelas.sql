@@ -29,7 +29,7 @@ CREATE TABLE utilizadores (
     discord_uid BIGINT PRIMARY KEY, 
     nome_usuario VARCHAR(100) NOT NULL, 
     tag_usuario VARCHAR(10) NOT NULL, 
-    data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+    data_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
 );
 
 CREATE TABLE cargos ( 
