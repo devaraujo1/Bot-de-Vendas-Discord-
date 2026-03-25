@@ -98,18 +98,34 @@ SELECT (100000000000000000 + gs)::bigint, ((gs % 3) + 1)::int, ((gs * 100) + 150
        CASE WHEN gs % 2 = 0 THEN 'Pago' ELSE 'Pendente' END 
 FROM generate_series(1, 30) AS gs;
 
-INSERT INTO itens_pedido (id_pedido, id_produto, quantidade) 
-SELECT gs, ((gs % 30) + 1)::int, ((gs % 5) + 1)::int 
-FROM generate_series(1, 30) AS gs;
+-- 8. Itens Pedido
+INSERT INTO itens_pedido (pedido_numero, produto_codigo, quantidade_comprada) VALUES 
+(1, 1, 1), (2, 2, 2), (3, 3, 1), (4, 4, 3), (5, 5, 1), (6, 6, 2),
+(7, 7, 1), (8, 8, 1), (9, 9, 2), (10, 10, 1), (11, 11, 3), (12, 12, 1),
+(13, 13, 1), (14, 14, 2), (15, 15, 1), (16, 16, 1), (17, 17, 3), (18, 18, 1),
+(19, 19, 1), (20, 20, 2), (21, 21, 1), (22, 22, 1), (23, 23, 3), (24, 24, 1),
+(25, 25, 1), (26, 26, 2), (27, 27, 1), (28, 28, 1), (29, 29, 3), (30, 30, 1);
 
-INSERT INTO pagamentos_pix (id_pedido, codigo_copia_cola, confirmado, txid) 
-SELECT gs, '00020101021126580014br.gov.bcb.pix0136' || gs, (gs % 2 = 0), 'TXID' || gs 
-FROM generate_series(1, 30) AS gs;
+-- 9. Pagamentos (Vinculado a Formas de Pagamento e Pedidos)
+INSERT INTO pagamentos (pedido_numero, forma_codigo, codigo_transacao, status_pagamento) VALUES 
+(1, 1, 'TRX-101', 'Aprovado'), (2, 2, 'TRX-102', 'Pendente'), (3, 3, 'TRX-103', 'Aprovado'),
+(4, 1, 'TRX-104', 'Recusado'), (5, 2, 'TRX-105', 'Aprovado'), (6, 3, 'TRX-106', 'Pendente'),
+(7, 1, 'TRX-107', 'Aprovado'), (8, 2, 'TRX-108', 'Recusado'), (9, 3, 'TRX-109', 'Aprovado'),
+(10, 1, 'TRX-110', 'Pendente'), (11, 2, 'TRX-111', 'Aprovado'), (12, 3, 'TRX-112', 'Pendente'),
+(13, 1, 'TRX-113', 'Aprovado'), (14, 2, 'TRX-114', 'Recusado'), (15, 3, 'TRX-115', 'Aprovado'),
+(16, 1, 'TRX-116', 'Pendente'), (17, 2, 'TRX-117', 'Aprovado'), (18, 3, 'TRX-118', 'Recusado'),
+(19, 1, 'TRX-119', 'Aprovado'), (20, 2, 'TRX-120', 'Pendente'), (21, 3, 'TRX-121', 'Aprovado'),
+(22, 1, 'TRX-122', 'Pendente'), (23, 2, 'TRX-123', 'Aprovado'), (24, 3, 'TRX-124', 'Recusado'),
+(25, 1, 'TRX-125', 'Aprovado'), (26, 2, 'TRX-126', 'Pendente'), (27, 3, 'TRX-127', 'Aprovado'),
+(28, 1, 'TRX-128', 'Recusado'), (29, 2, 'TRX-129', 'Aprovado'), (30, 3, 'TRX-130', 'Pendente');
 
-INSERT INTO reembolsos_revogacoes (id_pedido, motivo, status_reembolso) 
-SELECT gs, 'Solicitação de devolução nº ' || gs, 'Pendente' 
-FROM generate_series(1, 30) AS gs;
+-- 10. Avaliacoes
+INSERT INTO avaliacoes_atendimento (ticket_numero, nota_avaliacao, comentario) VALUES 
+(3, 5, 'Ótimo atendimento!'), (6, 4, 'Muito bom.'), (9, 5, 'Resolveu rápido.'),
+(12, 3, 'Demorou um pouco.'), (15, 5, 'Perfeito.'), (18, 2, 'Não resolveu tudo.'),
+(21, 5, 'Excelente!'), (24, 4, 'Bom atendimento.'), (27, 5, 'Recomendo.'),
+(30, 1, 'Péssimo suporte.');
 
-INSERT INTO blacklist (id_discord_banido, motivo) 
-SELECT (100000000000000000 + gs)::bigint, 'Violação de Termos nº ' || gs 
-FROM generate_series(1, 30) AS gs;
+-- 11. Blacklist (A regra do professor é um mínimo de registros inseridos)
+INSERT INTO blacklist (banido_uid, motivo_banimento) VALUES 
+(100000000000000004, 'Fraude'), (100000000000000008, 'Xingou o admin'), (100000000000000014, 'Hack');
