@@ -5,32 +5,28 @@
 
 -- 1. Inner Join: Exiba o nome de usuário do Discord e o nome do cargo atribuído a ele.
 SELECT 
-    u.nome_utilizador, 
+    u.nome_usuario, 
     c.nome_cargo
 FROM utilizadores u
-INNER JOIN utilizador_cargos uc ON u.id_discord = uc.id_discord
-INNER JOIN cargos c ON uc.id_cargo = c.id_cargo;
+INNER JOIN utilizador_cargos uc ON u.discord_uid = uc.usuario_uid
+INNER JOIN cargos c ON uc.cargo_codigo = c.codigo;
 
-
--- 2. Right Join: Liste todos os pagamentos realizados e as vendas correspondentes, 
--- incluindo vendas pendentes sem pagamento.
+-- 2. Right Join: Liste todos os pagamentos realizados e as vendas correspondentes, incluindo vendas pendentes sem pagamento.
 SELECT 
-    pix.txid AS transacao_pix, 
-    pix.confirmado AS status_pix,
-    ped.id_pedido, 
-    ped.status_pagamento
-FROM pagamentos_pix pix
-RIGHT JOIN pedidos ped ON pix.id_pedido = ped.id_pedido;
+    pag.codigo_transacao, 
+    pag.status_pagamento AS status_financeiro,
+    ped.numero AS numero_pedido, 
+    ped.status_pedido AS status_da_venda
+FROM pagamentos pag
+RIGHT JOIN pedidos ped ON pag.pedido_numero = ped.numero;
 
-
--- 3. Left Join: Liste todos os usuários e os tickets de suporte que eles abriram, 
--- incluindo usuários que nunca precisaram de suporte.
+-- 3. Left Join: Liste todos os usuários e os tickets de suporte que eles abriram, incluindo usuários que nunca precisaram de suporte.
 SELECT 
-    u.nome_utilizador, 
-    t.id_ticket, 
-    t.status AS status_ticket
+    u.nome_usuario, 
+    t.numero AS numero_ticket, 
+    t.status_ticket
 FROM utilizadores u
-LEFT JOIN tickets t ON u.id_discord = t.id_dono_discord;
+LEFT JOIN tickets t ON u.discord_uid = t.dono_uid;
 
 
 -- 4. Inner Join: Mostre o nome do produto digital e a categoria à qual ele pertence.
