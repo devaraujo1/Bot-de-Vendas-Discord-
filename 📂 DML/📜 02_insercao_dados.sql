@@ -22,10 +22,8 @@ INSERT INTO tipos_ticket (nome_tipo, descricao_tipo) VALUES
 ('Denúncia', 'Denunciar usuários no servidor');
 
 
-INSERT INTO cupons (codigo, percentual_desconto, data_validade) VALUES 
-('BEMVINDO', 10, CURRENT_DATE + INTERVAL '30 days'), 
-('VIP20', 20, CURRENT_DATE + INTERVAL '60 days'), 
-('BLACKFRIDAY', 50, CURRENT_DATE + INTERVAL '120 days');
+INSERT INTO cupons (chave_cupom, percentual_desconto, data_validade) VALUES 
+('NATAL20', 20, '2026-12-25'), ('BEMVINDO', 10, '2028-01-01'), ('BLACKFRIDAY', 50, '2026-11-28');
 
 INSERT INTO permissoes (id_cargo, chave_permissao) VALUES 
 (1, 'banir_utilizador'), 
