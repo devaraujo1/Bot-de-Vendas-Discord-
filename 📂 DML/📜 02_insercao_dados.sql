@@ -33,9 +33,17 @@ INSERT INTO utilizadores (id_discord, nome_utilizador, tag_discord)
 SELECT (100000000000000000 + gs)::bigint, 'Usuario ' || gs, lpad((gs % 9999 + 1)::text, 4, '0') 
 FROM generate_series(1, 30) AS gs;
 
-INSERT INTO utilizador_cargos (id_discord, id_cargo) 
-SELECT (100000000000000000 + gs)::bigint, ((gs % 3) + 1)::int 
-FROM generate_series(1, 30) AS gs;
+INSERT INTO utilizador_cargos (id_utilizador, id_cargo) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 2),
+(5, 4),
+(6, 3),
+(7, 2),
+(8, 4),
+(9, 3),
+(10, 2);
 
 INSERT INTO produtos (id_categoria, nome, descricao, preco) VALUES
 (1, 'Windows 11 Pro OEM', 'Licença digital do Windows 11 Pro OEM', 89.90),
