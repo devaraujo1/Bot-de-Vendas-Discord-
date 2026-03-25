@@ -55,64 +55,48 @@ CREATE TABLE tipos_ticket (
     descricao_tipo VARCHAR(255) 
 );
 
-CREATE TABLE cupons (
-    id_cupom SERIAL PRIMARY KEY,
-    codigo VARCHAR(50) NOT NULL UNIQUE,
-    tipo_desconto VARCHAR(20) NOT NULL CHECK (tipo_desconto IN ('percentual', 'fixo')),
-    valor_desconto NUMERIC(10,2) NOT NULL CHECK (valor_desconto > 0),
-    data_inicio DATE NOT NULL,
-    data_fim DATE NOT NULL,
-    uso_maximo INT,
-    ativo BOOLEAN NOT NULL DEFAULT TRUE
+CREATE TABLE cupons ( 
+    codigo SERIAL PRIMARY KEY, 
+    chave_cupom VARCHAR(50) NOT NULL UNIQUE, 
+    percentual_desconto INT CHECK (percentual_desconto >= 0 AND percentual_desconto <= 100), 
+    data_validade DATE 
 );
 
-CREATE TABLE permissoes (
-    id_permissao SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL UNIQUE,
-    descricao TEXT
+
+CREATE TABLE permissoes ( 
+    codigo SERIAL PRIMARY KEY, 
+    cargo_codigo INTEGER NOT NULL, 
+    chave_permissao VARCHAR(100) NOT NULL, 
+    CONSTRAINT fk_perm_cargo FOREIGN KEY (cargo_codigo) REFERENCES cargos(codigo) ON DELETE CASCADE, 
+    UNIQUE (cargo_codigo, chave_permissao) 
 );
 
-CREATE TABLE produtos (
-    id_produto SERIAL PRIMARY KEY,
-    id_categoria INT NOT NULL,
-    nome VARCHAR(150) NOT NULL,
-    descricao TEXT,
-    preco NUMERIC(10,2) NOT NULL CHECK (preco >= 0),
-    ativo BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_produtos_categoria
-        FOREIGN KEY (id_categoria)
-        REFERENCES categorias(id_categoria)
+CREATE TABLE produtos ( 
+    codigo SERIAL PRIMARY KEY, 
+    categoria_codigo INT NOT NULL, 
+    nome_produto VARCHAR(150) NOT NULL, 
+    preco_centavos INT NOT NULL CHECK (preco_centavos > 0), 
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_codigo) REFERENCES categorias(codigo) ON DELETE RESTRICT 
 );
 
-CREATE TABLE utilizador_cargos (
-    id_utilizador INT NOT NULL,
-    id_cargo INT NOT NULL,
-    atribuido_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_utilizador, id_cargo),
-    CONSTRAINT fk_utilizador_cargos_utilizador
-        FOREIGN KEY (id_utilizador)
-        REFERENCES utilizadores(id_utilizador),
-    CONSTRAINT fk_utilizador_cargos_cargo
-        FOREIGN KEY (id_cargo)
-        REFERENCES cargos(id_cargo)
+CREATE TABLE utilizador_cargos ( 
+    usuario_uid BIGINT NOT NULL, 
+    cargo_codigo INTEGER NOT NULL, 
+    PRIMARY KEY (usuario_uid, cargo_codigo), 
+    CONSTRAINT fk_uc_usuario FOREIGN KEY (usuario_uid) REFERENCES utilizadores(discord_uid) ON DELETE CASCADE, 
+    CONSTRAINT fk_uc_cargo FOREIGN KEY (cargo_codigo) REFERENCES cargos(codigo) ON DELETE CASCADE 
 );
 
-CREATE TABLE tickets (
-    id_ticket SERIAL PRIMARY KEY,
-    id_utilizador INT NOT NULL,
-    id_tipo_ticket INT NOT NULL,
-    assunto VARCHAR(150) NOT NULL,
-    mensagem TEXT NOT NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'aberto' CHECK (status IN ('aberto', 'em_andamento', 'resolvido', 'fechado')),
-    prioridade VARCHAR(20) NOT NULL DEFAULT 'media' CHECK (prioridade IN ('baixa', 'media', 'alta')),
-    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_tickets_utilizador
-        FOREIGN KEY (id_utilizador)
-        REFERENCES utilizadores(id_utilizador),
-    CONSTRAINT fk_tickets_tipo
-        FOREIGN KEY (id_tipo_ticket)
-        REFERENCES tipos_ticket(id_tipo_ticket)
-); 
+CREATE TABLE tickets ( 
+    numero SERIAL PRIMARY KEY, 
+    canal_discord_uid BIGINT NOT NULL UNIQUE, 
+    dono_uid BIGINT NOT NULL, 
+    tipo_codigo INT NOT NULL, 
+    status_ticket VARCHAR(50) DEFAULT 'ABERTO' CHECK (status_ticket IN ('ABERTO', 'EM ANÁLISE', 'FECHADO')), 
+    data_abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    data_fechamento TIMESTAMP NULL, 
+    CONSTRAINT fk_ticket_tipo FOREIGN KEY (tipo_codigo) REFERENCES tipos_ticket(codigo) ON DELETE RESTRICT, 
+    CONSTRAINT fk_ticket_dono FOREIGN KEY (dono_uid) REFERENCES utilizadores(discord_uid) ON DELETE CASCADE 
 );
 
 CREATE TABLE pedidos ( 
