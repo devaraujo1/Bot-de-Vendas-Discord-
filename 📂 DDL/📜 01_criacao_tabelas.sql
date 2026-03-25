@@ -158,33 +158,32 @@ CREATE TABLE mensagens_ticket (
 );
 
 
-CREATE TABLE avaliacoes_atendimento (
-    id_ticket INT NOT NULL,
-    nota INT CHECK (nota BETWEEN 1 AND 5),
-    comentario TEXT,
-    PRIMARY KEY (id_ticket),
-    FOREIGN KEY (id_ticket) REFERENCES tickets(id_ticket)
+CREATE TABLE avaliacoes_atendimento ( 
+    codigo SERIAL PRIMARY KEY, 
+    ticket_numero INT NOT NULL UNIQUE, 
+    nota_avaliacao INT CHECK (nota_avaliacao BETWEEN 1 AND 5), 
+    comentario TEXT, 
+    CONSTRAINT fk_ticket_avaliacao FOREIGN KEY (ticket_numero) REFERENCES tickets(numero) ON DELETE CASCADE 
 );
 
 CREATE TABLE itens_pedido ( 
-    id_item_pedido SERIAL PRIMARY KEY, 
-    id_pedido INT NOT NULL, 
-    id_produto INT NOT NULL, 
-    quantidade INT NOT NULL CHECK (quantidade > 0), 
-    CONSTRAINT fk_item_pedido FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE, 
-    CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES produtos(id_produto) ON DELETE RESTRICT 
+    codigo SERIAL PRIMARY KEY, 
+    pedido_numero INT NOT NULL, 
+    produto_codigo INT NOT NULL, 
+    quantidade_comprada INT NOT NULL CHECK (quantidade_comprada > 0), 
+    CONSTRAINT fk_item_pedido FOREIGN KEY (pedido_numero) REFERENCES pedidos(numero) ON DELETE CASCADE, 
+    CONSTRAINT fk_item_produto FOREIGN KEY (produto_codigo) REFERENCES produtos(codigo) ON DELETE RESTRICT 
 );
 
-CREATE TABLE pagamentos_pix ( 
-    id_pagamento SERIAL PRIMARY KEY, 
-    id_pedido INT NOT NULL UNIQUE, 
-    codigo_copia_cola TEXT NOT NULL, 
-    confirmado BOOLEAN DEFAULT FALSE, 
-    txid VARCHAR(100) UNIQUE, 
-    expiracao_pagamento TIMESTAMP, 
-    id_cargo_recompensa INT, 
-    CONSTRAINT fk_pix_pedido FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE, 
-    CONSTRAINT fk_pix_cargo FOREIGN KEY (id_cargo_recompensa) REFERENCES cargos(id_cargo) ON DELETE SET NULL 
+CREATE TABLE pagamentos ( 
+    codigo SERIAL PRIMARY KEY, 
+    pedido_numero INT NOT NULL UNIQUE, 
+    forma_codigo INT NOT NULL, 
+    codigo_transacao VARCHAR(100) UNIQUE, 
+    status_pagamento VARCHAR(20) DEFAULT 'Pendente' CHECK (status_pagamento IN ('Pendente', 'Aprovado', 'Recusado')), 
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    CONSTRAINT fk_pagamento_pedido FOREIGN KEY (pedido_numero) REFERENCES pedidos(numero) ON DELETE CASCADE,
+    CONSTRAINT fk_pagamento_forma FOREIGN KEY (forma_codigo) REFERENCES formas_pagamento(codigo) ON DELETE RESTRICT
 );
 
 CREATE TABLE reembolsos_revogacoes ( 
