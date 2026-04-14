@@ -195,3 +195,29 @@ FROM cupons c
 INNER JOIN pedidos ped ON c.codigo = ped.cupom_codigo
 GROUP BY c.chave_cupom
 ORDER BY total_utilizacoes DESC;
+
+
+-- 13. Group By: Conte o total de tickets de suporte agrupados por status (Aberto/Fechado).
+SELECT 
+    status_ticket, 
+    COUNT(*) AS total_tickets
+FROM tickets
+GROUP BY status_ticket;
+
+-- 14. Group By: Calcule o valor total de vendas gerado por cada produto digital.
+SELECT 
+    p.nome_produto,
+    SUM(p.preco_centavos * ip.quantidade_comprada) AS total_vendas_centavos
+FROM itens_pedido ip
+INNER JOIN produtos p ON ip.produto_codigo = p.codigo
+GROUP BY p.nome_produto
+ORDER BY total_vendas_centavos DESC;
+
+-- 15. Group By: Liste a quantidade de usuários vinculados a cada cargo/permissão do servidor.
+SELECT 
+    c.nome_cargo,
+    COUNT(uc.usuario_uid) AS total_usuarios
+FROM cargos c
+INNER JOIN utilizador_cargos uc ON c.codigo = uc.cargo_codigo
+GROUP BY c.nome_cargo
+ORDER BY total_usuarios DESC;
