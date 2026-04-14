@@ -169,11 +169,29 @@ WHERE p.chave_permissao IS NOT NULL;
 
 
 -- 10. Group By: Conte a quantidade de logs de auditoria para cada tipo de ação administrativa.
-
+SELECT 
+    motivo_banimento AS acao_administrativa, 
+    COUNT(codigo) AS total_logs
+FROM blacklist
+GROUP BY motivo_banimento;
 
 
 -- 11. Intersect: Encontre IDs de produtos que estão "Disponíveis" e que possuem registro de venda.
+SELECT produto_codigo 
+FROM stock_digital 
+WHERE foi_vendido = FALSE
 
+INTERSECT
+
+SELECT produto_codigo 
+FROM itens_pedido;
 
 
 -- 12. Group By: Calcule o total de cupons de desconto utilizados agrupados por código do cupom.
+SELECT 
+    c.chave_cupom, 
+    COUNT(ped.numero) AS total_utilizacoes
+FROM cupons c
+INNER JOIN pedidos ped ON c.codigo = ped.cupom_codigo
+GROUP BY c.chave_cupom
+ORDER BY total_utilizacoes DESC;
