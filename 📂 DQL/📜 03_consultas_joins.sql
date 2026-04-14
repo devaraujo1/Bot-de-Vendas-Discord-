@@ -146,8 +146,14 @@ WHERE p.chave_permissao IS NOT NULL;
 
 
 -- 4. Group By: Totalize os reembolsos processados agrupados por mês de ocorrência.
-
-
+SELECT 
+    LEFT(pag.data_atualizacao::text, 7) AS mes_ocorrencia,
+    COUNT(r.codigo) AS total_reembolsos
+FROM reembolsos_revogacoes r
+INNER JOIN pagamentos pag ON r.pedido_numero = pag.pedido_numero
+WHERE r.status_reembolso = 'Aprovado'
+GROUP BY LEFT(pag.data_atualizacao::text, 7)
+ORDER BY mes_ocorrencia;
 
 -- 5. Union: Combine os usernames de usuários comuns e usernames de administradores em uma lista.
 
