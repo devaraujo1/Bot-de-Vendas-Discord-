@@ -29,12 +29,15 @@ FROM utilizadores u
 LEFT JOIN tickets t ON u.discord_uid = t.dono_uid;
 
 
--- 4. Inner Join: Mostre o nome do produto digital e a categoria à qual ele pertence.
+-- 4. Group By: Totalize os reembolsos processados agrupados por mês de ocorrência.
 SELECT 
-    p.nome_produto, 
-    c.nome_categoria
-FROM produtos p
-INNER JOIN categorias c ON p.categoria_codigo = c.codigo;
+    LEFT(pag.data_atualizacao::text, 7) AS mes_ocorrencia,
+    COUNT(r.codigo) AS total_reembolsos
+FROM reembolsos_revogacoes r
+INNER JOIN pagamentos pag ON r.pedido_numero = pag.pedido_numero
+WHERE r.status_reembolso = 'Aprovado'
+GROUP BY LEFT(pag.data_atualizacao::text, 7)
+ORDER BY mes_ocorrencia;
 
 
 -- 5. Inner Join: Relacione a venda com o código do produto que foi entregue automaticamente.
