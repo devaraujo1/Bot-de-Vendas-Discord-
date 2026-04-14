@@ -120,3 +120,60 @@ RIGHT JOIN cargos c ON p.cargo_codigo = c.codigo
 RIGHT JOIN utilizador_cargos uc ON c.codigo = uc.cargo_codigo
 RIGHT JOIN utilizadores u ON uc.usuario_uid = u.discord_uid
 WHERE p.chave_permissao IS NOT NULL;
+
+
+
+
+-- ====================================================================================
+-- SCRIPT DQL: CONSULTAS RELACIONAIS (GROUP BY, UNION, INTERSECT)
+-- ====================================================================================
+
+-- 1. Group By: Conte o total de tickets de suporte agrupados por status (Aberto/Fechado).
+
+
+
+
+-- 2. Group By: Calcule o valor total de vendas gerado por cada produto digital.
+
+
+
+
+-- 3. Group By: Liste a quantidade de usuários vinculados a cada cargo/permissão do servidor.
+
+
+
+-- 4. Group By: Totalize os reembolsos processados agrupados por mês de ocorrência.
+
+
+
+-- 5. Union: Combine os usernames de usuários comuns e usernames de administradores em uma lista.
+
+
+
+-- 6. Union All: Liste todos os IDs de transação de vendas e todos os IDs de reembolsos.
+
+
+
+
+-- 7. Intersect: Identifique usuários que realizaram uma compra e também abriram um ticket de suporte.
+
+
+
+-- 8. Group By: Calcule a média de gastos por usuário nas transações PIX.
+
+
+
+-- 9. Union: Liste os nomes dos produtos da "Categoria X" e da "Categoria Y" em uma única consulta.
+
+
+
+
+-- 10. Group By: Conte a quantidade de logs de auditoria para cada tipo de ação administrativa.
+
+
+
+-- 11. Intersect: Encontre IDs de produtos que estão "Disponíveis" e que possuem registro de venda.
+
+
+
+-- 12. Group By: Calcule o total de cupons de desconto utilizados agrupados por código do cupom.
