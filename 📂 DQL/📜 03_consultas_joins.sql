@@ -29,15 +29,12 @@ FROM utilizadores u
 LEFT JOIN tickets t ON u.discord_uid = t.dono_uid;
 
 
--- 4. Group By: Totalize os reembolsos processados agrupados por mês de ocorrência.
-SELECT 
-    LEFT(pag.data_atualizacao::text, 7) AS mes_ocorrencia,
-    COUNT(r.codigo) AS total_reembolsos
-FROM reembolsos_revogacoes r
-INNER JOIN pagamentos pag ON r.pedido_numero = pag.pedido_numero
-WHERE r.status_reembolso = 'Aprovado'
-GROUP BY LEFT(pag.data_atualizacao::text, 7)
-ORDER BY mes_ocorrencia;
+-- 4. Inner Join: Mostre o nome do produto digital e a categoria à qual ele pertence.
+SELECT
+    p.nome_produto, 
+    c.nome_categoria
+FROM produtos p
+INNER JOIN categorias c ON p.categoria_codigo = c.codigo;
 
 
 -- 5. Inner Join: Relacione a venda com o código do produto que foi entregue automaticamente.
@@ -156,13 +153,29 @@ GROUP BY LEFT(pag.data_atualizacao::text, 7)
 ORDER BY mes_ocorrencia;
 
 -- 5. Union: Combine os usernames de usuários comuns e usernames de administradores em uma lista.
+SELECT u.nome_usuario, 'Admin' AS tipo_usuario
+FROM utilizadores u
+INNER JOIN utilizador_cargos uc ON u.discord_uid = uc.usuario_uid
+INNER JOIN cargos c ON uc.cargo_codigo = c.codigo
+WHERE c.nome_cargo = 'Admin'
 
+UNION
+
+SELECT u.nome_usuario, 'Comum' AS tipo_usuario
+FROM utilizadores u
+INNER JOIN utilizador_cargos uc ON u.discord_uid = uc.usuario_uid
+INNER JOIN cargos c ON uc.cargo_codigo = c.codigo
+WHERE c.nome_cargo <> 'Admin';
 
 
 -- 6. Union All: Liste todos os IDs de transação de vendas e todos os IDs de reembolsos.
+SELECT codigo_transacao AS id_geral, 'Venda' AS origem
+FROM pagamentos
 
+UNION ALL
 
-
+SELECT codigo::text AS id_geral, 'Reembolso' AS origem
+FROM reembolsos_revogacoes;
 
 -- 7. Intersect: Identifique usuários que realizaram uma compra e também abriram um ticket de suporte.
 
