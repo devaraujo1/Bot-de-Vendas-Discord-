@@ -178,17 +178,37 @@ SELECT codigo::text AS id_geral, 'Reembolso' AS origem
 FROM reembolsos_revogacoes;
 
 -- 7. Intersect: Identifique usuários que realizaram uma compra e também abriram um ticket de suporte.
+SELECT comprador_uid AS usuario_discord
+FROM pedidos
 
+INTERSECT
 
+SELECT dono_uid AS usuario_discord
+FROM tickets;
 
 -- 8. Group By: Calcule a média de gastos por usuário nas transações PIX.
-
-
+SELECT 
+    p.comprador_uid AS usuario_discord,
+    AVG(p.valor_final) AS media_gastos
+FROM pedidos p
+INNER JOIN pagamentos pg ON p.numero = pg.pedido_numero
+INNER JOIN formas_pagamento f ON pg.forma_codigo = f.codigo
+WHERE f.descricao_forma = 'PIX'
+  AND pg.status_pagamento = 'Aprovado'
+GROUP BY p.comprador_uid;
 
 -- 9. Union: Liste os nomes dos produtos da "Categoria X" e da "Categoria Y" em uma única consulta.
+SELECT p.nome_produto, c.nome_categoria
+FROM produtos p
+INNER JOIN categorias c ON p.categoria_codigo = c.codigo
+WHERE c.nome_categoria = 'Scripts'
 
+UNION
 
-
+SELECT p.nome_produto, c.nome_categoria
+FROM produtos p
+INNER JOIN categorias c ON p.categoria_codigo = c.codigo
+WHERE c.nome_categoria = 'Skins';
 
 -- 10. Group By: Conte a quantidade de logs de auditoria para cada tipo de ação administrativa.
 SELECT 
