@@ -88,3 +88,103 @@ $$;
 
 COMMENT ON FUNCTION TempoMedioRespostaTicket() IS
 'Calcula a média de tempo entre abertura e fechamento dos tickets encerrados.';
+
+-- 2)PROCEDURES
+
+
+CREATE OR REPLACE PROCEDURE GerarVendaPix(
+    p_comprador_uid BIGINT,
+    p_valor_final INT,
+    OUT p_pedido_numero INT,
+    OUT p_codigo_transacao VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_forma_pix INT;
+BEGIN
+    SELECT codigo INTO v_forma_pix
+    FROM formas_pagamento
+    WHERE descricao_forma = 'PIX'
+    LIMIT 1;
+
+    INSERT INTO pedidos (comprador_uid, valor_final, status_pedido)
+    VALUES (p_comprador_uid, p_valor_final, 'Pendente')
+    RETURNING numero INTO p_pedido_numero;
+
+    p_codigo_transacao := 'PIX-' || EXTRACT(EPOCH FROM NOW())::BIGINT;
+
+    INSERT INTO pagamentos (pedido_numero, forma_codigo, codigo_transacao, status_pagamento)
+    VALUES (p_pedido_numero, v_forma_pix, p_codigo_transacao, 'Pendente');
+END;
+$$;
+
+COMMENT ON PROCEDURE GerarVendaPix(BIGINT, INT) IS
+'Cria registro de venda pendente e gera código simulado de transação PIX.';
+
+
+CREATE OR REPLACE PROCEDURE ProcessarReembolso(
+    p_pedido_numero INT,
+    p_motivo TEXT,
+    p_admin_uid BIGINT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE pedidos
+    SET status_pedido = 'Reembolsado'
+    WHERE numero = p_pedido_numero;
+
+    INSERT INTO reembolsos_revogacoes (pedido_numero, motivo_reembolso, status_reembolso)
+    VALUES (p_pedido_numero, p_motivo, 'Aprovado')
+    ON CONFLICT (pedido_numero) DO UPDATE
+    SET motivo_reembolso = EXCLUDED.motivo_reembolso,
+        status_reembolso = 'Aprovado';
+
+    INSERT INTO logs_auditoria (admin_uid, tabela_afetada, registro_id, acao, detalhes)
+    VALUES (
+        p_admin_uid,
+        'pedidos',
+        p_pedido_numero,
+        'REEMBOLSAR',
+        'Reembolso processado: ' || p_motivo
+    );
+END;
+$$;
+
+COMMENT ON PROCEDURE ProcessarReembolso(INT, TEXT, BIGINT) IS
+'Altera status do pedido para Reembolsado e registra auditoria da ação.';
+
+
+CREATE OR REPLACE PROCEDURE AtribuirCargoAutomatico(
+    p_usuario_uid BIGINT,
+    p_pedido_numero INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_status VARCHAR(20);
+    v_cargo_vip INT;
+BEGIN
+    SELECT status_pedido INTO v_status
+    FROM pedidos
+    WHERE numero = p_pedido_numero;
+
+    IF v_status IS DISTINCT FROM 'Pago' THEN
+        RAISE EXCEPTION 'Pedido % não está confirmado (status atual: %)', p_pedido_numero, v_status;
+    END IF;
+
+    SELECT codigo INTO v_cargo_vip
+    FROM cargos
+    WHERE nome_cargo = 'Comprador VIP'
+    LIMIT 1;
+
+    INSERT INTO utilizador_cargos (usuario_uid, cargo_codigo)
+    VALUES (p_usuario_uid, v_cargo_vip)
+    ON CONFLICT (usuario_uid, cargo_codigo) DO NOTHING;
+END;
+$$;
+
+COMMENT ON PROCEDURE AtribuirCargoAutomatico(BIGINT, INT) IS
+'Atribui cargo Comprador VIP ao usuário após confirmação de compra.';
+
