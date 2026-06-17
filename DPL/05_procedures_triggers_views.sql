@@ -88,3 +88,112 @@ $$;
 
 COMMENT ON FUNCTION TempoMedioRespostaTicket() IS
 'Calcula a média de tempo entre abertura e fechamento dos tickets encerrados.';
+
+-- 2) TRIGGERS
+CREATE OR REPLACE FUNCTION fn_log_auditoria_admin()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_admin_uid BIGINT;
+    v_acao VARCHAR(50);
+    v_registro_id INT;
+    v_detalhes TEXT;
+BEGIN
+    BEGIN
+        v_admin_uid := current_setting('app.admin_uid', true)::BIGINT;
+    EXCEPTION WHEN OTHERS THEN
+        RETURN COALESCE(NEW, OLD);
+    END;
+
+    IF v_admin_uid IS NULL THEN
+        RETURN COALESCE(NEW, OLD);
+    END IF;
+
+    IF TG_OP = 'UPDATE' THEN
+        v_acao := 'EDITAR';
+        v_registro_id := NEW.codigo;
+        v_detalhes := 'Registro atualizado na tabela ' || TG_TABLE_NAME;
+    ELSIF TG_OP = 'DELETE' THEN
+        v_acao := 'REMOVER';
+        v_registro_id := OLD.codigo;
+        v_detalhes := 'Registro removido da tabela ' || TG_TABLE_NAME;
+    ELSE
+        RETURN COALESCE(NEW, OLD);
+    END IF;
+
+    IF VerificarNivelAcesso(v_admin_uid, 'gerenciar_produtos')
+       OR EXISTS (
+           SELECT 1 FROM utilizador_cargos uc
+           INNER JOIN cargos c ON uc.cargo_codigo = c.codigo
+           WHERE uc.usuario_uid = v_admin_uid AND c.nome_cargo = 'Admin'
+       ) THEN
+        INSERT INTO logs_auditoria (admin_uid, tabela_afetada, registro_id, acao, detalhes)
+        VALUES (v_admin_uid, TG_TABLE_NAME, v_registro_id, v_acao, v_detalhes);
+    END IF;
+
+    RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+CREATE TRIGGER trg_log_auditoria_produtos
+    AFTER UPDATE OR DELETE ON produtos
+    FOR EACH ROW EXECUTE PROCEDURE fn_log_auditoria_admin();
+
+CREATE TRIGGER trg_log_auditoria_permissoes
+    AFTER UPDATE OR DELETE ON permissoes
+    FOR EACH ROW EXECUTE PROCEDURE fn_log_auditoria_admin();
+
+
+CREATE OR REPLACE FUNCTION fn_auto_fechar_ticket()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_ultima_interacao TIMESTAMP;
+BEGIN
+    SELECT GREATEST(
+        COALESCE(MAX(m.data_envio), '1970-01-01'::TIMESTAMP),
+        COALESCE(t.data_abertura, '1970-01-01'::TIMESTAMP)
+    )
+    INTO v_ultima_interacao
+    FROM tickets t
+    LEFT JOIN mensagens_ticket m ON m.ticket_numero = t.numero
+    WHERE t.numero = NEW.ticket_numero
+    GROUP BY t.data_abertura;
+
+    IF v_ultima_interacao < NOW() - INTERVAL '7 days' THEN
+        UPDATE tickets
+        SET status_ticket = 'Resolvido',
+            data_fechamento = COALESCE(data_fechamento, NOW())
+        WHERE numero = NEW.ticket_numero
+          AND status_ticket NOT IN ('FECHADO', 'Resolvido');
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_auto_fechar_ticket
+    BEFORE INSERT ON mensagens_ticket
+    FOR EACH ROW EXECUTE PROCEDURE fn_auto_fechar_ticket();
+
+
+CREATE OR REPLACE FUNCTION fn_verificar_bloqueio_usuario()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM blacklist WHERE banido_uid = NEW.comprador_uid
+    ) THEN
+        RAISE EXCEPTION 'Usuário % está banido e não pode realizar compras.', NEW.comprador_uid;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_verificar_bloqueio_usuario
+    BEFORE INSERT ON pedidos
+    FOR EACH ROW EXECUTE PROCEDURE fn_verificar_bloqueio_usuario();
