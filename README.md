@@ -27,8 +27,6 @@ Bot-de-Vendas-Discord/
 ├── README.md
 ├── Instruções.md
 ├── DATABASE_SCHEMA.md
-├── 00_executar_tudo.sql
-├── executar_tudo.ps1
 │
 ├── DDL/
 │   └── 01_criacao_tabelas.sql       Parte 02 — DROP + CREATE
