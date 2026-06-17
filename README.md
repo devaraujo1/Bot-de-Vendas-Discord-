@@ -17,7 +17,7 @@ O escopo é exclusivamente **SQL** (DDL, DML, DQL e DPL) — não há implementa
 - Aplicar integridade referencial, normalização e boas práticas de modelagem
 - Entregar as Partes 02 a 05 conforme [`Instruções.md`](Instruções.md)
 
----
+--
 
 ## Estrutura do Repositório
 
